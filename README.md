@@ -1,94 +1,23 @@
 # PatchPilot ViT
 
-**Repository name:** `patchpilot-vit`
+This is a small PyTorch project I put together to work through the main parts of a Vision Transformer classifier: splitting an image into patches, embedding them, adding a class token and positional embeddings, and passing the sequence to a Transformer encoder.
 
-**Description:** A lightweight PyTorch Vision Transformer notebook demonstrating patch embeddings, transformer encoding, and an image-classification training loop.
+## Model
 
-PatchPilot ViT is a compact educational implementation of a Vision Transformer
-(ViT) image classifier in PyTorch. The notebook shows the main ViT pipeline:
-turning an image into fixed-size patches, projecting patches into embeddings,
-adding a class token and positional embeddings, passing the sequence through a
-Transformer encoder, and using the class token for classification.
+`PatchEmbedding` turns a 224 × 224 image into 196 patches of size 16 × 16. `ViTEmbedding` adds the learnable class and positional embeddings. The encoder uses PyTorch's `nn.TransformerEncoder`; a LayerNorm and linear layer produce the class scores.
 
-## What Is Inside
+The current configuration uses an embedding dimension of 256, six encoder layers, eight attention heads, an MLP dimension of 512, and ten output classes.
 
-- `FakeCIFAR10`: a small synthetic dataset with random RGB images and random labels.
-- `PatchEmbedding`: converts each `224 x 224` image into `16 x 16` patches using a convolution.
-- `ViTEmbedding`: adds the learnable class token and positional embedding.
-- `SimpleViT`: combines the embedding block, Transformer encoder, LayerNorm, and linear classifier.
-- Training and validation helpers based on CrossEntropy loss, AdamW, and a cosine learning-rate scheduler.
+## Data and current status
 
-## Important Note About Results
+The notebook uses `FakeCIFAR10`, which creates random images and random labels. It does **not** load the real CIFAR-10 dataset. I used it to sketch out the data and training pipeline, so its accuracy should not be read as an image-classification result.
 
-The current notebook uses random synthetic data, not the real CIFAR-10 dataset.
-Because both images and labels are random, accuracy is not expected to become
-meaningful. This repository is best understood as a clean ViT architecture and
-training-loop practice notebook. To produce real experimental results, replace
-`FakeCIFAR10` with a real image dataset such as CIFAR-10, Tiny ImageNet, or a
-custom dataset.
+The notebook still needs a couple of fixes before it runs end to end: define `device` before creating the model, and correct the `claculate_accuracy` function name to `calculate_accuracy` so it matches the calls below. There are no saved training results in the repository yet.
 
-## Suggested Fixes Before Running
+## Run the notebook
 
-The notebook is almost ready, but two small fixes are needed:
+Open `Vit.ipynb` in Jupyter or Colab with PyTorch installed. After making the two fixes above, run the cells from top to bottom. To evaluate the model, replace the synthetic dataset with a real one and report results from an actual run.
 
-```python
-device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-```
+## Dependency
 
-Add this before creating the model.
-
-Also rename:
-
-```python
-def claculate_accuracy(logits, labels):
-```
-
-to:
-
-```python
-def calculate_accuracy(logits, labels):
-```
-
-The training and validation functions call `calculate_accuracy`, so the function
-name must match.
-
-## Quick Start
-
-1. Open `Vit.ipynb` in Jupyter Notebook, JupyterLab, or Google Colab.
-2. Install PyTorch if it is not already available.
-3. Add the `device` line before model creation.
-4. Fix the accuracy function name.
-5. Run the cells from top to bottom.
-
-## Minimal Dependencies
-
-```text
-torch
-```
-
-Optional, if you later add plots or dataset visualization:
-
-```text
-matplotlib
-torchvision
-```
-
-## Model Summary
-
-- Image size: `224 x 224`
-- Patch size: `16 x 16`
-- Number of patches: `196`
-- Token sequence length: `197` including the class token
-- Embedding dimension: `256`
-- Transformer depth: `6`
-- Attention heads: `8`
-- MLP dimension: `512`
-- Number of classes: `10`
-
-## Recommended Next Steps
-
-- Replace `FakeCIFAR10` with a real dataset.
-- Save the best model weights with `torch.save`.
-- Plot training and validation loss/accuracy curves.
-- Compare different patch sizes, embedding dimensions, and Transformer depths.
-- Unfreeze the full model once real data is used.
+- PyTorch
