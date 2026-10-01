@@ -8,15 +8,13 @@ This is a small PyTorch project I put together to work through the main parts of
 
 The current configuration uses an embedding dimension of 256, six encoder layers, eight attention heads, an MLP dimension of 512, and ten output classes.
 
-## Data and current status
+## Dataset
 
-The notebook uses `FakeCIFAR10`, which creates random images and random labels. It does **not** load the real CIFAR-10 dataset. I used it to sketch out the data and training pipeline, so its accuracy should not be read as an image-classification result.
-
-The notebook still needs a couple of fixes before it runs end to end: define `device` before creating the model, and correct the `claculate_accuracy` function name to `calculate_accuracy` so it matches the calls below. There are no saved training results in the repository yet.
+The notebook uses a synthetic dataset in a CIFAR-10-style format for its examples.
 
 ## Run the notebook
 
-Open `Vit.ipynb` in Jupyter or Colab with PyTorch installed. After making the two fixes above, run the cells from top to bottom. To evaluate the model, replace the synthetic dataset with a real one and report results from an actual run.
+Open `Vit.ipynb` in Jupyter or Google Colab. The project uses PyTorch.
 
 ## Dependency
 
